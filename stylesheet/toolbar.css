@@ -1,0 +1,146 @@
+.toolbar {
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: 208px 64px 64px 64px 64px;
+    grid-template-rows: 64px;
+    image-rendering: pixelated;
+
+}
+.colorpicker {
+    display: grid;
+
+    grid-template-columns: 64px 2fr;
+    grid-template-rows: 64px;
+    grid-gap: 16px;
+
+    position: relative;
+}
+.mainpicker {
+    grid-column: 1/2;
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+
+.mainpicker>#colorpicker-block {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 52px;
+    height: 52px;
+    padding: 0px;
+    border-style: hidden;
+    z-index: 0;
+}
+
+.mainpicker>input[type=color] {
+    display: none;
+}
+
+.mainpicker>#colorpicker-border {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 64px;
+    height: 64px;
+
+    padding: 0px;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(/asset/img/color_container.webp);
+    z-index: 1;
+}
+
+.pallete-table {
+    grid-column: 2/3;
+    position: relative;
+}
+.pallete {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.pallete input {
+    display: none;
+}
+
+.pallete-block {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.pallete-border {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(/asset/img/pallete_block.webp);
+    
+    z-index: 1;
+    width: 32px;
+    height: 32px;
+}
+
+.countdown {
+    color: black;
+    font-size: 48px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#clear-button {
+    grid-column: 3/4;
+    grid-row: 1;
+    width: 64px;
+    height: 64px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(/asset/img/clear_button.webp)
+
+}
+
+#pencil-button  {
+    grid-column: 4/5;
+    grid-row: 1;
+    width: 64px;
+    height: 64px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(/asset/img/pencil_button.webp);
+}
+
+#eraser-button {
+    grid-column: 5/6;
+    grid-row: 1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 64px;
+    height: 64px;
+    background-image: url(/asset/img/eraser_button.webp);
+}
+
+.mainpicker:hover,
+.pallete:hover,
+#clear-button:hover,
+#pencil-button:hover,
+#eraser-button:hover {
+    filter: brightness(1.2);
+    cursor: pointer;
+}
+
+.mainpicker:active,
+.pallete:active,
+#clear-button:active,
+#pencil-button:active,
+#eraser-button:active {
+    filter: brightness(0.8);
+}

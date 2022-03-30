@@ -1,0 +1,113 @@
+
+
+.player-avatar-unready, .player-avatar-offline {
+    background-image: url(/asset/img/avatar.webp);
+}
+
+.player-avatar-ready {
+    background-image: url(/asset/img/avatar.webp);
+    background-position: -56px -0px;
+}
+
+.player-avatar-offline {
+    filter: grayscale(100%);
+}
+
+.players {
+    display: grid;
+}
+
+.player-item {
+    margin-bottom: 20px;
+    margin-right: 20px;
+    color: black; 
+    display: grid;
+    column-gap: 8px;
+    grid-template-columns: 16px, 40px, 60px;
+    grid-template-rows: 10px, 10px, 10px, 10px;
+    
+}
+
+.player-pointer {
+    width: 16px;
+    height: 20px;
+    grid-column: 0/1;
+    grid-row: 2/4;
+    
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(./asset/img/pointer.webp);
+}
+
+.player-avatar-offline,.player-avatar-online {
+    width: 40px;
+    height: 40px;
+    grid-column: 2/3;
+    grid-row: 1/5;
+
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.player-name {
+    width: 60px;
+    height: 20px;
+    font-size: 12px;
+    text-align: left;
+    grid-column: 3/4;
+    grid-row: 2/3;
+}
+
+.score {
+    font-size: 12px;
+    height: 20px;
+    grid-column: 3/4;
+    grid-row: 3/5;
+}
+
+.score-voteup {
+    color: #ff7777;
+}
+
+.score-voteneutral  {
+    color: #22ff22;
+}
+
+.score-votedown {
+    color: #22bbff;
+}
+
+#player-avatar-0.player-avatar-online {
+    filter: hue-rotate(305deg);
+}
+
+#player-avatar-1.player-avatar-online {
+    filter: hue-rotate(0deg);
+}
+
+#player-avatar-2.player-avatar-online {
+    filter: hue-rotate(45deg);
+}
+
+#player-avatar-3.player-avatar-online {
+    filter: hue-rotate(90deg);
+}
+
+#player-avatar-4.player-avatar-online {
+    filter: hue-rotate(135deg);
+}
+
+#player-avatar-5.player-avatar-online {
+    filter: hue-rotate(180deg);
+}
+
+#player-avatar-6.player-avatar-online {
+    filter: hue-rotate(225deg);
+}
+
+#player-avatar-7.player-avatar-online{
+    filter: hue-rotate(270deg);
+}

@@ -1,0 +1,34 @@
+[package]
+name = "dng-yew-client"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.release]
+panic = 'abort'
+codegen-units = 1
+opt-level = 's' 
+lto = true
+
+
+[dependencies]
+
+yew = {version = "0.19"}
+yew-agent = "0.1.0"
+serde = { version = "1.0", features = ["derive"] }
+wasm-bindgen = "0.2.77"
+wasm-bindgen-futures = "0.4.27"
+js-sys = "0.3.54"
+# yew_styles = { version="0.11", features = ["navbar","layouts","button"]}
+# stylist = "0.9"
+gloo-timers = "0.2"
+gloo-net = "0.1.0"
+futures = {version="*", features = ["default"]}
+bincode = {version = "*"}
+wee_alloc = "*"
+
+[dependencies.web-sys]
+
+version = "*"
+features = ["HtmlInputElement", "HtmlCanvasElement", "CanvasRenderingContext2d", "ImageData", "console", "UrlSearchParams"]

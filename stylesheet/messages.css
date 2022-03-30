@@ -1,0 +1,44 @@
+.LexiconUploader>button,input {
+    font-size: 12px;
+    box-sizing: content-box;
+}
+
+.poll-option {
+    display: grid;
+    grid-template-rows: repeat(12px);
+}
+
+.poll-option>label>.poll-option-label {
+    text-align: left;
+    border: none;
+    font-size: 12px;
+    width: 100%;
+    background-color: #404040;
+}
+
+.poll-option>label>.poll-option-label:hover {
+    background-color: #808080;
+}
+
+.poll-option>label>input {
+    display:none;
+    border: none;
+}
+
+.poll-option>label>input[type="radio"]:checked + .poll-option-label  {
+    background-color: #8f8f8f;
+}
+
+.notice {
+    background-color: #ffdd99;
+    color: #444
+}
+.warn {
+    background-color: #ff9999;
+    color: #444
+}
+
+.game-state {
+    text-align: center;
+    color: #ffc966;
+}

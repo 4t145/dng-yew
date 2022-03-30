@@ -1,0 +1,126 @@
+body,html {
+    /* overflow: hidden; */
+    height: 100%;
+}
+  
+@font-face {
+    font-family: mplus_hzk_12;
+    src: url(/asset/font/mplus_hzk_12.ttf);
+}
+  
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: mplus_hzk_12, 'monospace';
+    /* -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; */
+    background-color: gray;
+}
+  
+footer {
+    font-size: 12px;
+    position: absolute;
+    bottom: 0%;
+    z-index: 0;
+}
+
+.app {
+
+    background-color: #ffebc9;
+    width: 1024px;
+    height: 768px;
+    display: grid;
+    /* border: rgb(255, 255, 255) solid 4px; */
+    
+    padding: 4px;
+  
+    grid-template-columns: 160px 532px 128px;
+    grid-template-rows: 64px 536px 64px;
+    color: white;
+}
+
+.players {
+
+    grid-column: 1/2;
+    grid-row: 2/3;
+}
+
+.drawpad {
+    grid-row: 2/3;
+    grid-column: 2/3;
+}
+
+.toolbar {
+    margin-top: 16px;
+
+    grid-row: 3/4;
+    grid-column: 2/3;
+}
+
+.console {
+    grid-row: 2/3;
+    grid-column: 3/4;
+    margin-top: 16px;
+}
+
+.back {
+    grid-row: 1/4;
+    grid-column: 1/4;
+
+    width: 1056px;
+    height: 800px;
+    z-index: -1;
+    background-color: black;
+}
+
+.topbar {
+    position: absolute;
+
+    width: 1024px;
+    height: 36px;
+    z-index: 1;
+    background-color: rgb(253, 231, 231);
+    /* border-radius: 4px;
+    border-color: black;
+    border-style: solid; */
+
+}
+
+.topbar>.logo {
+    position: absolute;
+    background-image: url(./logo.webp);
+    left: 0;
+    height: 36px;
+    width: 36px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    image-rendering: pixelated;
+    z-index: 2;
+}
+
+.topbar>.title {
+    position: absolute;
+    background-image: url(./title.webp);
+    left: 48px;
+    height: 36px;
+    width: 164px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    image-rendering: pixelated;
+    z-index: 2;
+}
+
+.topbar>.buttons {
+    position: absolute;
+    right: 0;
+    height: 36px;
+    width: 116px;
+    background-image: url(./right_top_buttons.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    image-rendering: pixelated;
+    z-index: 2;
+}
+

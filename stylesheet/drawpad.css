@@ -1,0 +1,25 @@
+.drawpad {
+    background-image: url('/asset/img/drawpad512.webp');
+    touch-action: none;
+
+    width: 532px;
+    height: 536px;
+    padding: 0;
+}
+
+.drawpad>canvas {
+    position: relative;
+    top: 8px;
+    left: 8px;
+    width: 512px;
+    height: 512px;
+
+    touch-action: none;
+
+    background-color: rgb(255, 255, 255);
+    image-rendering: pixelated;
+}
+
+.drawpad:hover {
+    cursor:crosshair
+}
