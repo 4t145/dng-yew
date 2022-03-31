@@ -2,6 +2,8 @@
 你画我猜的网页客户端
 
 ## 使用
+首先你可以通过访问 http://www.你画我猜.com/hall 来使用我在5美元vps上部署的服务。
+
 ### 加入房间
 访问`<webset_url>/?server=<server>`，其中`<server>`是房间服务器的ip+端口，如`127.0.0.1:9000`
 ![图片](https://user-images.githubusercontent.com/34513116/160798411-866faf6b-59ab-4f11-a306-855f1f451118.png)
