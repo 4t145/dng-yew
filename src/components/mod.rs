@@ -53,6 +53,7 @@ impl Component for App {
             AppMsg::Ws(resp) => {
                 match resp.as_ref() {
                     Resp::PlayerStates(states) => {
+                        self.player_states = Default::default();
                         for s in states {
                             self.player_states[s.idx as usize] = Some(s.clone());
                         }
