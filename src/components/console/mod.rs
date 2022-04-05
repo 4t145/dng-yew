@@ -8,12 +8,15 @@ use yew::prelude::*;
 use agent::ConsoleAgent;
 use item::{ItemProps, Item};
 use web_sys::{HtmlInputElement, HtmlElement};
-use crate::{rgb};
+use crate::{rgb, locals};
 use crate::ws::{WsRespAgent, WsReqAgent, Resp, Req};
 
 use crate::components::drawpad::{DrawpadAgent, DrawpadReq, StreamMode};
 
 pub struct Console {
+
+    local: locals::Locals<'static>, 
+
     items: Vec<ItemProps>,
     input_ref: NodeRef,
     output_ref: NodeRef,
@@ -24,9 +27,6 @@ pub struct Console {
 
 
     resp_bus: Option<Box<dyn Bridge<WsRespAgent>>>,
-
-
-
     agent: Option<Box<dyn Bridge<ConsoleAgent>>>,
 }
 
@@ -44,7 +44,9 @@ impl Component for Console {
 
     fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            items: vec![ItemProps{kind:item::ItemKind::Help}],
+            items: vec![ItemProps{kind:item::ItemKind::Help{local: &locals::ZH}}],
+
+            local: locals::ZH,
             input_ref: NodeRef::default(),
             output_ref: NodeRef::default(),
             req_bus: WsReqAgent::dispatcher(),
@@ -55,6 +57,7 @@ impl Component for Console {
     }
 
     fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+        let local = &self.local;
         use ConsoleMsg::*;
         use item::ItemKind::*;
         match msg {
@@ -70,12 +73,25 @@ impl Component for Console {
                         return false
                     }
                     if input.starts_with('/') {
-                        self.items.push(ItemProps{kind:Command { task: "console".to_string(), msg: input.to_string() }});
+                        self.items.push(ItemProps{kind:Command { task: "console".into(), msg: input.into() }});
                         let mut paras = input.split_ascii_whitespace();
                         match paras.next() {
                             Some("/name") => {
                                 if let Some(name) = paras.next() {
-                                    self.req_bus.send(Req::SetName { name: name.to_string() });
+                                    self.req_bus.send(Req::SetName { name: name.into() });
+                                }
+                            },
+                            Some("/lang") => {
+                                if let Some(lang) = paras.next() {
+                                    use crate::locals::*;
+                                    match lang.to_ascii_lowercase().as_str() {
+                                        "zh" => self.local = ZH,
+                                        "en" => self.local = EN,
+                                        _ => {
+                                            self.items.push(ItemProps{kind:Command { task: "lang".into(), msg: "no such localization, but you may help to translate".into() }});
+
+                                        }
+                                    }
                                 }
                             },
                             Some("/sc") => {
@@ -85,7 +101,7 @@ impl Component for Console {
                                         let g = ((color >> 08) & 0xff) as u8;
                                         let b = ((color >> 00) & 0xff) as u8;
                                         self.items.push(ItemProps{
-                                            kind: Command { task: "sc".to_string(), msg: "sc".to_string() } 
+                                            kind: Command { task: "sc".into(), msg: "sc".into() } 
                                         });
                                         self.drawpad_agent.send(DrawpadReq::SetColor(rgb!(r,g,b)));
                                     }
@@ -107,28 +123,28 @@ impl Component for Console {
                                         self.req_bus.send(Req::LexiconService(lex))
                                     } else {
                                         if content.contains("github.com") {
-                                            self.req_bus.send(Req::LexiconGit(content.to_string()))
+                                            self.req_bus.send(Req::LexiconGit(content.into()))
                                         } else {
-                                            self.items.push(ItemProps{kind:Warn{ msg: "请检查你输入的命令是否正确".to_string() }})
+                                            self.items.push(ItemProps{kind:Warn{ msg: local.check_your_input.into() }})
                                         }
                                     }
                                 }
                                 _ => {
-                                    self.items.push(ItemProps{kind:Warn{ msg: "不支持的命令".to_string() }})
+                                    self.items.push(ItemProps{kind:Warn{ msg: local.unsupported.into() }})
                                 }
                             },
                             Some("/help") => {
-                                self.items.push(ItemProps{kind:Help})
+                                self.items.push(ItemProps{kind:Help{local}})
                             }
                             _ => {}
                         }
                     } else {
                         self.items.push(
                             ItemProps{
-                                kind: Chat { sender: "我".to_string(), msg: input.to_string() }
+                                kind: Chat { sender: local.me.into() , msg: input.into() }
                             }
                         );
-                        self.req_bus.send(Req::Chat { msg: input.to_string() });
+                        self.req_bus.send(Req::Chat { msg: input.into() });
                     }
                     input_element.set_value("");
                     true
@@ -137,18 +153,19 @@ impl Component for Console {
                 }
             },
             Ws(resp) => {
-               let kind =  match resp.as_ref() {
+                let local = &self.local;
+                let kind =  match resp.as_ref() {
                     Resp::Chat { sender, msg } => Chat { sender: sender.clone(), msg: msg.clone()},
                     Resp::Notice { msg } => Notice { msg: msg.clone()},
                     Resp::Warn { msg } => Warn { msg: msg.clone()},
-                    Resp::GameStart => GameState { msg: "本轮开始".to_string() },
-                    Resp::GameEnd => GameState { msg: "本轮结束".to_string() },
-                    Resp::Topic { topic_word } => GameState { msg: format!("关键词： {}", topic_word) },
-                    Resp::TurnStart(_) => GameState { msg: "回合开始".to_string() },
-                    Resp::TurnEnd => GameState { msg: "回合结束".to_string() },
-                    Resp::MarkStart => GameState { msg: "评分开始".to_string() },
-                    Resp::Poll => Poll,
-                    Resp::MarkEnd => GameState { msg: "评分结束".to_string() },
+                    Resp::GameStart => GameState { msg: local.game_start.into() },
+                    Resp::GameEnd => GameState { msg: local.game_end.into() },
+                    Resp::Topic { topic_word } => GameState { msg: format!("{}{}", local.game_end, topic_word) },
+                    Resp::TurnStart(_) => GameState { msg: local.turn_start.into() },
+                    Resp::TurnEnd => GameState { msg: local.turn_end.into() },
+                    Resp::MarkStart => GameState { msg: local.mark_start.into() },
+                    Resp::Poll => Poll {local: local},
+                    Resp::MarkEnd => GameState { msg: local.mark_end.into() },
                     _ => {
                         return false;
                     }
@@ -160,7 +177,7 @@ impl Component for Console {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-
+        let local = &self.local;
         
         let vnodes = self.items.iter().map(|p|{
             html!{<Item ..p.clone()/>}
@@ -180,7 +197,7 @@ impl Component for Console {
         html! {
             <div class="console">
                 <div class="output" ref = {self.output_ref.clone()}>{vnodes}</div>
-                <input type="text" placeholder="在此输入" ref = {self.input_ref.clone()} {onkeyup}/>
+                <input type="text" placeholder={local.input_placeholder} ref = {self.input_ref.clone()} {onkeyup}/>
             </div>
         }
     }

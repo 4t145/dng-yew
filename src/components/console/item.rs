@@ -1,13 +1,13 @@
+
 use wasm_bindgen::JsCast;
 use web_sys::HtmlInputElement;
-use yew::prelude::*;
-use serde::{Deserialize, Serialize};
+use yew::{prelude::*, virtual_dom::VNode};
 use yew_agent::{Dispatched};
 
 use crate::{ws::{WsReqAgent}};
 
 
-#[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ItemKind {
     Command {
         task: String,
@@ -26,11 +26,15 @@ pub enum ItemKind {
     GameState {
         msg: String
     },
-    Poll,
-    Help
+    Poll {
+        local: *const crate::locals::Locals<'static>
+    },
+    Help {
+        local: *const crate::locals::Locals<'static>
+    }
 }
 
-#[derive(Debug, Clone, Properties, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Properties, PartialEq)]
 pub struct ItemProps {
     pub kind: ItemKind
 } 
@@ -42,7 +46,7 @@ pub fn item(props: &ItemProps) -> Html {
         Command{task, msg} => {
             let msg = format!("{}> {}", task, msg);
             html! {
-                <div class={classes!("command")}>
+                <div class="command">
                     {msg}
                 </div>
             }
@@ -50,34 +54,35 @@ pub fn item(props: &ItemProps) -> Html {
         Chat{sender, msg} => {
             let msg = format!("{}: {}", sender, msg);
             html! {
-                <div class={classes!("chat")}>
+                <div class="chat">
                     {msg}
                 </div>
             }
         },
         Notice{msg} => {
             html! {
-                <div class={classes!("notice")}>
+                <div class="notice">
                     {msg}
                 </div>
             }
         },
         Warn{msg} => {
             html! {
-                <div class={classes!("warn")}>
+                <div class="warn">
                     {msg}
                 </div>
             }
         },
         GameState{msg} => {
             html! {
-                <div class={classes!("game-state")}>
+                <div class="game-state">
                     {msg}
                 </div>
             }
         },
         
-        Poll => {
+        Poll{local} => {
+            let local = unsafe {&*(*local)};
             let oninput = Callback::from(move |evt:InputEvent|{
                 let mut ws = WsReqAgent::dispatcher();
                 let target = evt.target().unwrap().dyn_into::<HtmlInputElement>().unwrap();
@@ -87,44 +92,32 @@ pub fn item(props: &ItemProps) -> Html {
             html! {
                 <div class="poll">
                     <form {oninput}>
-                        <div class="poll-topic">{"打个分吧"}</div>
+                        <div class="poll-topic">{local.mark}</div>
                         <div class="poll-option" >
                             <label id="option-1">
                                 <input type="radio" name="vote" value="-1"/>
-                                <div class="poll-option-label" style = "color:#ff7777;">{"又摆摆 --p"}</div>
+                                <div class="poll-option-label" style = "color:#ff7777;">{local.vote_down}</div>
                             </label>
                             <label id="option-2">
                                 <input type="radio"  name="vote" value="0"/>
-                                <div class="poll-option-label" style = "color:#ccffcc;">{"一般般 o_o"}</div>
+                                <div class="poll-option-label" style = "color:#ccffcc;">{local.vote_neutral}</div>
                             </label>
                             <label id="option-3">
                                 <input type="radio"  name="vote" value="1"/>
-                                <div class="poll-option-label" style = "color:#55ccff;">{"优棒棒 ^^b"}</div>
+                                <div class="poll-option-label" style = "color:#55ccff;">{local.vote_up}</div>
                             </label>
                         </div>
                     </form>
                 </div>
             }
         }
-        Help => {
+        Help{local} => {
+            let local = unsafe {&*(*local)};
+
+            let lines:Vec<VNode> = local.help.lines().map(|line|html!(<span>{line}<br/></span>)).collect();
             html! {
                 <div class="help">
-                    {r#"help> 帮助"#}<br/>
-                    {r#"# 快捷键"#}<br/>
-                    {r#"crtl+z 撤销，crtl+z 重做，crtl+x 清屏"#}<br/>
-                    {r#"在铅笔模式下， 右键按下使用橡皮擦"#}<br/>
-                    {r#"E键可以在铅笔和橡皮擦之间切换, 主要是方便数位笔使用者"#}<br/>
-                    {r#"右键调色板小方块可以修改调色板颜色"#}<br/>
-                    {r#""#}<br/>
-                    {r#"# 关键命令"#}<br/>
-                    {r#"/ready 准备"#}<br/>
-                    {r#"/unready 取消准备"#}<br/>
-                    {r#"/name <名字> 设置名字"#}<br/>
-                    {r#"/lexicon <文件网址> 从github上下载词库"#}<br/>
-                    {r#"/lexicon <词库代码> 从词库服务器设置词库"#}<br/>
-                    {r#""#}<br/>
-                    {r#"更详细帮助参考：<todo>"#}<br/>
-                    {r#"/help 调出此帮助"#}<br/>
+                    {lines}
                 </div>
             }
         }
