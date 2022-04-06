@@ -2,6 +2,8 @@ use super::Locals;
 
 const HELP:&str = 
 r#"
+help> HELP
+
 switch to Chinese: /lang zh
 
 # Shortkey
@@ -16,6 +18,9 @@ right click little palette block to change it's color
 /name <name> set your name
 /lexicon <file-url> download lexicon from github
 /lexicon <lexicon code> set lexicon of lexicon server
+
+# Example Lexicon Repo
+https://github.com/4t145/dng-lex/tree/main/en
 
 more reference: https://github.com/4t145/dng-yew
 /help to show this
