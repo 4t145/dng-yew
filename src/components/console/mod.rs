@@ -191,9 +191,6 @@ impl Component for Console {
             }
         });
 
-        if let Some(output) = self.output_ref.cast::<HtmlElement>() {
-            output.scroll_to_with_x_and_y(0.0, output.scroll_height().into());
-        }
         html! {
             <div class="console">
                 <div class="output" ref = {self.output_ref.clone()}>{vnodes}</div>
@@ -206,6 +203,10 @@ impl Component for Console {
         if first_render {
             self.agent = Some(ConsoleAgent::bridge(ctx.link().callback(ConsoleMsg::AddItem)));
             self.resp_bus =  Some(WsRespAgent::bridge(ctx.link().callback(ConsoleMsg::Ws)));
+        }
+        if let Some(output) = self.output_ref.cast::<HtmlElement>() {
+            crate::info!("im here");
+            output.scroll_to_with_x_and_y(0.0, output.scroll_height().into());
         }
     }
 
