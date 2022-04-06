@@ -18,6 +18,9 @@ E键可以在铅笔和橡皮擦之间切换, 主要是方便数位笔使用者
 /lexicon <文件网址> 从github上下载词库
 /lexicon <词库代码> 从词库服务器设置词库
 
+# 可用中文词库
+https://github.com/4t145/dng-lex/tree/main/zh
+
 更详细帮助参考：https://github.com/4t145/dng-yew
 /help 调出此帮助
 "#;
