@@ -160,7 +160,7 @@ impl Component for Console {
                     Resp::Warn { msg } => Warn { msg: msg.clone()},
                     Resp::GameStart => GameState { msg: local.game_start.into() },
                     Resp::GameEnd => GameState { msg: local.game_end.into() },
-                    Resp::Topic { topic_word } => GameState { msg: format!("{}{}", local.game_end, topic_word) },
+                    Resp::Topic { topic_word } => GameState { msg: format!("{}{}", local.key_word, topic_word) },
                     Resp::TurnStart(_) => GameState { msg: local.turn_start.into() },
                     Resp::TurnEnd => GameState { msg: local.turn_end.into() },
                     Resp::MarkStart => GameState { msg: local.mark_start.into() },
